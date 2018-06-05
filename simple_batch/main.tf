@@ -25,9 +25,8 @@ resource "aws_subnet" "default" {
 }
 
 resource "aws_security_group" "default" {
-  name        = "terraform_example"
-  description = "Used in the terraform"
-  vpc_id      = "${aws_vpc.default.id}"
+  name   = "batch_security_group"
+  vpc_id = "${aws_vpc.default.id}"
 
   ingress {
     from_port   = 22
@@ -51,16 +50,16 @@ resource "aws_iam_role" "ecs_instance_role" {
 
   assume_role_policy = <<EOF
 {
-    "Version": "2012-10-17",
-    "Statement": [
+  "Version": "2012-10-17",
+  "Statement": [
     {
-        "Action": "sts:AssumeRole",
-        "Effect": "Allow",
-        "Principal": {
+      "Action": "sts:AssumeRole",
+      "Effect": "Allow",
+      "Principal": {
         "Service": "ec2.amazonaws.com"
-        }
+      }
     }
-    ]
+  ]
 }
 EOF
 }
@@ -68,6 +67,33 @@ EOF
 resource "aws_iam_role_policy_attachment" "ecs_instance_role" {
   role       = "${aws_iam_role.ecs_instance_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_iam_role_policy" "ecs_instance_role_policy" {
+  name = "ecs_instance_role_policy"
+  role = "${aws_iam_role.ecs_instance_role.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:ListBucket"],
+      "Resource": ["arn:aws:s3:::${var.bucket}"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": ["arn:aws:s3:::${var.bucket}/*"]
+    }
+  ]
+}
+EOF
 }
 
 resource "aws_iam_instance_profile" "ecs_instance_role" {
@@ -82,13 +108,13 @@ resource "aws_iam_role" "aws_batch_service_role" {
 {
     "Version": "2012-10-17",
     "Statement": [
-    {
+      {
         "Action": "sts:AssumeRole",
         "Effect": "Allow",
         "Principal": {
-        "Service": "batch.amazonaws.com"
+          "Service": "batch.amazonaws.com"
         }
-    }
+      }
     ]
 }
 EOF

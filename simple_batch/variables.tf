@@ -31,3 +31,5 @@ variable "batch_container_memory" {
 variable "batch_container_cpu" {
   default = 2
 }
+
+variable "bucket" {}
