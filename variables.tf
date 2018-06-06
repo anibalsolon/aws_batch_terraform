@@ -33,3 +33,13 @@ variable "batch_container_cpu" {
 }
 
 variable "bucket" {}
+
+variable "cpac_pipeline_file" {
+  default = "/cpac_resources/default_pipeline.yaml"
+}
+
+variable "cpac_output_dir" {
+  default = ""
+}
+
+variable "cpac_data_config_file" {}

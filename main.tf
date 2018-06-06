@@ -169,6 +169,10 @@ resource "aws_batch_job_queue" "default" {
   compute_environments = ["${aws_batch_compute_environment.default.arn}"]
 }
 
+locals {
+  cpac_output_dir = "${var.cpac_output_dir != "" ? var.cpac_output_dir : "s3://${var.bucket}"}"
+}
+
 resource "aws_batch_job_definition" "default" {
   name = "default"
   type = "container"
@@ -177,7 +181,15 @@ resource "aws_batch_job_definition" "default" {
 {
     "image": "${var.batch_container_image}",
     "memory": ${var.batch_container_memory},
-    "vcpus": ${var.batch_container_cpu}
+    "vcpus": ${var.batch_container_cpu},
+    "command": [
+      "/code/run.py", 
+      "--participant_ndx", "-1",
+      "--n_cpus", "${var.batch_container_cpu}",
+      "--pipeline_file", "${var.cpac_pipeline_file}",
+      "--data_config_file", "${var.cpac_data_config_file}",
+      "/", "${local.cpac_output_dir}", "participant"
+    ]
 }
 CONTAINER_PROPERTIES
 }
