@@ -79,17 +79,14 @@ resource "aws_iam_role_policy" "ecs_instance_role_policy" {
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": ["s3:ListBucket"],
-      "Resource": ["arn:aws:s3:::${var.bucket}"]
-    },
-    {
-      "Effect": "Allow",
       "Action": [
+        "s3:ListAllMyBuckets",
+        "s3:ListBucket",
         "s3:PutObject",
         "s3:GetObject",
         "s3:DeleteObject"
       ],
-      "Resource": ["arn:aws:s3:::${var.bucket}/*"]
+      "Resource": ["arn:aws:s3:::*"]
     }
   ]
 }
@@ -128,22 +125,22 @@ resource "aws_iam_role_policy_attachment" "aws_batch_service_role" {
 # Batch
 
 resource "aws_key_pair" "auth" {
-  key_name   = "${var.key_name}"
+  key_name   = "${var.project}"
   public_key = "${file(var.public_key_path)}"
 }
 
 resource "aws_batch_compute_environment" "default" {
-  compute_environment_name = "default"
+  compute_environment_name = "${var.project}"
 
   compute_resources {
     instance_role = "${aws_iam_instance_profile.ecs_instance_role.arn}"
 
-    instance_type = "${var.batch_instance_types}"
+    instance_type = ["${var.batch_instance_type}"]
 
     ec2_key_pair = "${aws_key_pair.auth.id}"
 
-    min_vcpus     = 0
-    desired_vcpus = 0
+    min_vcpus     = 2
+    desired_vcpus = "${var.batch_max_vcpus}"
     max_vcpus     = "${var.batch_max_vcpus}"
 
     security_group_ids = [
@@ -163,33 +160,21 @@ resource "aws_batch_compute_environment" "default" {
 }
 
 resource "aws_batch_job_queue" "default" {
-  name                 = "default"
+  name                 = "${var.project}"
   state                = "ENABLED"
   priority             = 1
   compute_environments = ["${aws_batch_compute_environment.default.arn}"]
 }
 
-locals {
-  cpac_output_dir = "${var.cpac_output_dir != "" ? var.cpac_output_dir : "s3://${var.bucket}"}"
-}
-
 resource "aws_batch_job_definition" "default" {
-  name = "default"
+  name = "${var.project}"
   type = "container"
 
   container_properties = <<CONTAINER_PROPERTIES
 {
     "image": "${var.batch_container_image}",
-    "memory": ${var.batch_container_memory},
-    "vcpus": ${var.batch_container_cpu},
-    "command": [
-      "/code/run.py", 
-      "--participant_ndx", "-1",
-      "--n_cpus", "${var.batch_container_cpu}",
-      "--pipeline_file", "${var.cpac_pipeline_file}",
-      "--data_config_file", "${var.cpac_data_config_file}",
-      "/", "${local.cpac_output_dir}", "participant"
-    ]
+    "memory": 2048,
+    "vcpus": 2
 }
 CONTAINER_PROPERTIES
 }
