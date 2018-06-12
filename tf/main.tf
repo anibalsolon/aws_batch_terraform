@@ -135,7 +135,7 @@ resource "aws_batch_compute_environment" "default" {
   compute_resources {
     instance_role = "${aws_iam_instance_profile.ecs_instance_role.arn}"
 
-    instance_type = ["${var.batch_instance_type}"]
+    instance_type = ["optimal"]
 
     ec2_key_pair = "${aws_key_pair.auth.id}"
 
@@ -173,8 +173,8 @@ resource "aws_batch_job_definition" "default" {
   container_properties = <<CONTAINER_PROPERTIES
 {
     "image": "${var.batch_container_image}",
-    "memory": 2048,
-    "vcpus": 2
+    "memory": 8192,
+    "vcpus": 4
 }
 CONTAINER_PROPERTIES
 }

@@ -1,8 +1,7 @@
 #!/bin/bash
 
-INSTANCE_TYPE="c4.large"
 AWS_REGION="us-east-1"
-MAX_CPUS="5"
+MAX_CPUS="16"
 PUBLIC_KEY_FILE="$HOME/.ssh/id_rsa.pub"
 
 POSITIONAL=()
@@ -22,11 +21,6 @@ do
         ;;
         --aws_region)
             AWS_REGION="$2"
-            shift
-            shift
-        ;;
-        --instance_type)
-            INSTANCE_TYPE="$2"
             shift
             shift
         ;;
@@ -51,13 +45,17 @@ if [[ ! -f $PUBLIC_KEY_FILE ]]; then
     exit 1
 fi
 
+echo "
+*** Warning: It is using a tweaked C-PAC to work with AWS. Run 'git pull' from time to time to check for official updates. ***
+"
+
 terraform apply \
     -var "project=${PROJECT}" \
     -var "aws_region=${AWS_REGION}" \
-    -var "batch_instance_type=${INSTANCE_TYPE}" \
     -var "batch_max_vcpus=${MAX_CPUS}" \
-    -var "public_key_path=${PUBLIC_KEY_FILE}"
+    -var "public_key_path=${PUBLIC_KEY_FILE}" \
+    tf
 
 exit 0
 
-./generate_infra.sh cpac-batch --max_cpu 5 --instance_type c4.large
+./generate_infra.sh cpac-batch --max_cpu 16 --instance_type c4.4xlarge

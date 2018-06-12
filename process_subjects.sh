@@ -1,8 +1,8 @@
 #!/bin/bash
 
 DEFAULT_PIPELINE_FILE="/cpac_resources/default_pipeline.yaml"
-DEFAULT_CONTAINER_CPU=2
-DEFAULT_CONTAINER_MEMORY=3072
+DEFAULT_CONTAINER_CPU=4
+DEFAULT_CONTAINER_MEMORY=8192
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]
@@ -108,6 +108,10 @@ else
     fi
 fi
 
+echo "
+*** Warning: It is using a tweaked C-PAC to work with AWS. Run 'git pull' from time to time to check for official updates. ***
+"
+
 for PARTICIPANT in ${PARTICIPANTS}
 do
     aws batch submit-job \
@@ -127,12 +131,23 @@ do
         }"
 done
 
+# Code to check for logs
+# start_time=$(( ( $(date -u +"%s") - $start_seconds_ago ) * 1000 ))
+# while [[ -n "$start_time" ]]; do
+#   loglines=$( aws --output text logs get-log-events --log-group-name "/aws/batch/job" --log-stream-name "${PROJECT}/default/${JOB_ID}" --start-time $start_time )
+#   [ $? -ne 0 ] && break
+#   next_start_time=$( sed -nE 's/^EVENTS.([[:digit:]]+).+$/\1/ p' <<< "$loglines" | tail -n1 )
+#   [ -n "$next_start_time" ] && start_time=$(( $next_start_time + 1 ))
+#   echo "$loglines"
+#   sleep 15
+# done
+
 exit 0
 
 ./process_subjects.sh \
     cpac-batch \
-    --n_cpus 2 \
-    --mem_gb 2 \
+    --n_cpus 4 \
+    --mem_gb 8 \
     --pipeline_file s3://cpac-batch/pipeline_config.yaml \
     --data_config_file s3://cpac-batch/data_config.yaml \
     --output_dir s3://cpac-batch/output -- 0050642 0050646 0050647 0050649 0050653 0050654 0050656 0050659 0050660
@@ -140,8 +155,8 @@ exit 0
 
 ./process_subjects.sh \
     cpac-batch \
-    --n_cpus 2 \
-    --mem_gb 2 \
+    --n_cpus 4 \
+    --mem_gb 8 \
     --pipeline_file s3://cpac-batch/pipeline_config.yaml \
     --data_config_file s3://cpac-batch/data_config.yaml \
     --output_dir s3://cpac-batch/output -- 0050642
