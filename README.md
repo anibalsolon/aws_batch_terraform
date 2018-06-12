@@ -24,7 +24,7 @@ You can open a support ticket on AWS to raise these limits.
 
 To build the infrastructure, you should run:
 ```bash
-./generate_infra.sh cpac-batch --max_cpu 16 --instance_type c4.4xlarge
+./generate_infra.sh my-project-cool-name --max_cpu 16 --instance_type c4.4xlarge
 ```
 
 *c4.4xlarge* is the AWS instance type that we recommend to run C-PAC.
@@ -40,9 +40,7 @@ to the configs in your bucket, and `--output_dir` with the bucket path for outpu
 
 ```bash
 ./process_subjects.sh \
-    cpac-batch \
-    --n_cpus 4 \
-    --mem_gb 8 \
+    my-project-cool-name \
     --pipeline_file s3://my-bucket/pipeline_config.yaml \
     --data_config_file s3://my-bucket/data_config.yaml \
     --output_dir s3://my-bucket/cpac_output -- 0000001 0000002 0000003 0000004
@@ -58,7 +56,7 @@ After your analysis finishes, and you do not need the infrastructure anymore, yo
 
 ```bash
 ./destroy_infra.sh \
-    cpac-batch
+    my-project-cool-name
 ```
 
 It will ask for a confirmation, with an "yes".
