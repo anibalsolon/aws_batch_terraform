@@ -1,4 +1,4 @@
-# Run C-PAC in AWS Batch
+# Running C-PAC in AWS Batch
 
 This set of scripts and Terraform definitions will help you to seamlessly build up your own infrastructure on AWS, run preprocessing of your subjects, and turn off the infrastructure.
 
