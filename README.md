@@ -15,6 +15,8 @@ You are ready to start preprocessing!
 
 In order to preprocess your neuroimages on AWS, the data must be on a S3 bucket, along with the data config and pipeline config YAML file.
 
+The user that you use to configure AWS CLI should have access to the S3 bucket.
+
 ## Building up the infrastructure
 
 Please check your current limits of running instances on AWS: https://console.aws.amazon.com/ec2/v2/home#Limits:
@@ -43,7 +45,7 @@ to the configs in your bucket, and `--output_dir` with the bucket path for outpu
     --mem_gb 8 \
     --pipeline_file s3://my-bucket/pipeline_config.yaml \
     --data_config_file s3://my-bucket/data_config.yaml \
-    --output_dir s3://my-bucket/output -- 0000001 0000002 0000003 0000004
+    --output_dir s3://my-bucket/cpac_output -- 0000001 0000002 0000003 0000004
 ```
 
 It will schedule a job for each subject, so AWS Batch manager will parallelise all subject pipelines.

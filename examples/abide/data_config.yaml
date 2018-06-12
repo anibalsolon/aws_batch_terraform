@@ -1,0 +1,79 @@
+# CPAC Data Configuration File
+# Version 1.0.3
+#
+# http://fcp-indi.github.io for more info.
+#
+# Tip: This file can be edited manually with a text editor for quick modifications.
+
+- anat: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050642/anat/sub-0050642_T1w.nii.gz
+  func:
+    rest_run-1:
+      scan: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050642/func/sub-0050642_task-rest_run-1_bold.nii.gz
+      scan_parameters: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/task-rest_bold.json
+  site: CMU_a
+  subject_id: '0050642'
+  unique_id: ses-1
+- anat: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050646/anat/sub-0050646_T1w.nii.gz
+  func:
+    rest_run-1:
+      scan: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050646/func/sub-0050646_task-rest_run-1_bold.nii.gz
+      scan_parameters: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/task-rest_bold.json
+  site: CMU_a
+  subject_id: '0050646'
+  unique_id: ses-1
+- anat: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050647/anat/sub-0050647_T1w.nii.gz
+  func:
+    rest_run-1:
+      scan: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050647/func/sub-0050647_task-rest_run-1_bold.nii.gz
+      scan_parameters: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/task-rest_bold.json
+  site: CMU_a
+  subject_id: '0050647'
+  unique_id: ses-1
+- anat: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050649/anat/sub-0050649_T1w.nii.gz
+  func:
+    rest_run-1:
+      scan: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050649/func/sub-0050649_task-rest_run-1_bold.nii.gz
+      scan_parameters: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/task-rest_bold.json
+  site: CMU_a
+  subject_id: 0050649
+  unique_id: ses-1
+- anat: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050653/anat/sub-0050653_T1w.nii.gz
+  func:
+    rest_run-1:
+      scan: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050653/func/sub-0050653_task-rest_run-1_bold.nii.gz
+      scan_parameters: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/task-rest_bold.json
+  site: CMU_a
+  subject_id: '0050653'
+  unique_id: ses-1
+- anat: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050654/anat/sub-0050654_T1w.nii.gz
+  func:
+    rest_run-1:
+      scan: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050654/func/sub-0050654_task-rest_run-1_bold.nii.gz
+      scan_parameters: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/task-rest_bold.json
+  site: CMU_a
+  subject_id: '0050654'
+  unique_id: ses-1
+- anat: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050656/anat/sub-0050656_T1w.nii.gz
+  func:
+    rest_run-1:
+      scan: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050656/func/sub-0050656_task-rest_run-1_bold.nii.gz
+      scan_parameters: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/task-rest_bold.json
+  site: CMU_a
+  subject_id: '0050656'
+  unique_id: ses-1
+- anat: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050659/anat/sub-0050659_T1w.nii.gz
+  func:
+    rest_run-1:
+      scan: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050659/func/sub-0050659_task-rest_run-1_bold.nii.gz
+      scan_parameters: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/task-rest_bold.json
+  site: CMU_a
+  subject_id: 0050659
+  unique_id: ses-1
+- anat: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050660/anat/sub-0050660_T1w.nii.gz
+  func:
+    rest_run-1:
+      scan: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/sub-0050660/func/sub-0050660_task-rest_run-1_bold.nii.gz
+      scan_parameters: s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/CMU_a/task-rest_bold.json
+  site: CMU_a
+  subject_id: '0050660'
+  unique_id: ses-1
