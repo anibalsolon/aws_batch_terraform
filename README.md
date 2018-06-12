@@ -2,6 +2,8 @@
 
 This set of scripts and Terraform definitions will help you to seamlessly build up your own infrastructure on AWS, run preprocessing of your subjects, and turn off the infrastructure.
 
+> Warning: This is using a tweaked C-PAC to work with AWS. Run 'git pull' from time to time to check for official updates.
+
 ## Pre-requisites
 
 First, you need to install and configurate the AWS CLI: https://docs.aws.amazon.com/cli/latest/userguide/installing.html
