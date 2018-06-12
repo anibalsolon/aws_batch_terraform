@@ -48,13 +48,13 @@ to the configs in your bucket, and `--output_dir` with the bucket path for outpu
     --output_dir s3://my-bucket/cpac_output -- 0000001 0000002 0000003 0000004
 ```
 
-It will schedule a job for each subject, so AWS Batch manager will parallelise all subject pipelines.
+It will schedule a job for each subject, so AWS Batch manager will parallelise all subjects pipelines.
 
 The output will be uploaded to the informed bucket.
 
 ## Destroying your infrastructure
 
-After your analysis finishes, and you do not need the infrastructure anymore, you can safely destroy the infrastructure.
+After your analysis finishes, and you do not need the infrastructure anymore, you can safely destroy it.
 
 ```bash
 ./destroy_infra.sh \
