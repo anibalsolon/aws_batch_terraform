@@ -118,6 +118,7 @@ do
             \"vcpus\": ${CONTAINER_CPU},
             \"memory\": ${CONTAINER_MEMORY},
             \"command\": [
+                \"--skip_bids_validator\",
                 \"--participant_label\", \"$PARTICIPANT\",
                 \"--pipeline_file\", \"${PIPELINE_FILE}\",
                 \"--data_config_file\", \"${DATA_CONFIG_FILE}\",
