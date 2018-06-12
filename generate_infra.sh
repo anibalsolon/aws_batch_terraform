@@ -46,7 +46,7 @@ if [[ ! -f $PUBLIC_KEY_FILE ]]; then
 fi
 
 echo "
-*** Warning: It is using a tweaked C-PAC to work with AWS. Run 'git pull' from time to time to check for official updates. ***
+*** Warning: This is using a tweaked C-PAC to work with AWS. Run 'git pull' from time to time to check for official updates. ***
 "
 
 terraform apply \
