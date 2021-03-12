@@ -32,8 +32,8 @@ Having the limit of 20 cpus, and executing 14 jobs that use 4 cpus each, only 5 
 other 9 jobs get queued.
 
 Other options are:
-`--aws_region`: to specity to which AWS region to create the resources.
-`--public_key_path`: to specify the public SSH key to use in the Batch instances. By default, it uses `~/.ssh/id_rsa.pub`.
+* `--aws_region`: to specity to which AWS region to create the resources.
+* `--public_key_path`: to specify the public SSH key to use in the Batch instances. By default, it uses `~/.ssh/id_rsa.pub`.
 
 The command will show which AWS resources are going to be created. You need to confirm it with an "yes".
 
@@ -66,8 +66,8 @@ The pipeline YAML file is optional, using the default pipeline when it is not pr
 After the double dashes, a list of subject IDs must be provided.
 
 Other options are:
-`--n_cpus`: to specity the number of CPUs to allocate for each job.
-`--mem_gb`: to specify the amount of memory used for each job.
+* `--n_cpus`: to specity the number of CPUs to allocate for each job.
+* `--mem_gb`: to specify the amount of memory used for each job.
 
 It will schedule a job for each subject, so AWS Batch manager will parallelise all subjects pipelines.
 
