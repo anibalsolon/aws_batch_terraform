@@ -1,6 +1,5 @@
 #!/bin/bash
 
-DEFAULT_PIPELINE_FILE="/cpac_resources/default_pipeline.yaml"
 DEFAULT_CONTAINER_CPU=4
 DEFAULT_CONTAINER_MEMORY=8192
 
@@ -59,6 +58,8 @@ then
     exit 1
 fi
 
+BIDS_DIR=${2}
+
 CONTAINER_CPU=${CONTAINER_CPU-${DEFAULT_CONTAINER_CPU}}
 
 if [ ! -z "${CONTAINER_MEMORY_GB}" ]
@@ -75,23 +76,32 @@ fi
 
 if [ -z "${DATA_CONFIG_FILE}" ]
 then
-    echo "Data config file not provided. Use --data_config_file to set a data config file. It must be stored in a S3 bucket: s3://bucket-name/path/to/folder"
-    exit 1
+    if [ -z "${BIDS_DIR}" ]
+    then
+        echo "Data config or a BIDS directory must be provided."
+        exit 1
+    else
+        if [ ! "${BIDS_DIR:0:5}" = "s3://" ]
+        then
+            echo "BIDS directory must stored in a S3 bucket. Correct usage: s3://bucket-name/path/to/folder"
+            exit 1
+        fi
+    fi
 else
+    BIDS_DIR="/"
+
     if [ ! "${DATA_CONFIG_FILE:0:5}" = "s3://" ]
     then
-        echo "Data config must stored in a S3 bucket. Check the provided file: ${DATA_CONFIG_FILE}. Correct usage: s3://bucket-name/path/to/folder"
+        echo "Data config must stored in a S3 bucket. Check the provided file: ${DATA_CONFIG_FILE}. Correct usage: s3://bucket-name/path/to/folder/data_config.yml"
         exit 1
     fi
 fi
 
-if [ -z "${PIPELINE_FILE}" ]
+if [ ! -z "${PIPELINE_FILE}" ]
 then
-    PIPELINE_FILE=${DEFAULT_PIPELINE_FILE}
-else
     if [ ! "${PIPELINE_FILE:0:5}" = "s3://" ]
     then
-        echo "Pipeline file must stored in a S3 bucket. Check the provided file: ${PIPELINE_FILE}. Correct usage: s3://bucket-name/path/to/folder"
+        echo "Pipeline file must stored in a S3 bucket. Check the provided file: ${PIPELINE_FILE}. Correct usage: s3://bucket-name/path/to/folder/pipelne.yml"
         exit 1
     fi
 fi
@@ -108,27 +118,35 @@ else
     fi
 fi
 
-echo "
-*** Warning: This is using a tweaked C-PAC to work with AWS. Run 'git pull' from time to time to check for official updates. ***
-"
+DEFINITION='{
+    "vcpus": '${CONTAINER_CPU}',
+    "memory": '${CONTAINER_MEMORY}',
+    "command": []
+}'
+
+DEFINITION=$(jq '.command += ["'${BIDS_DIR}'", "'${OUTPUT_DIR}'", "participant"]' <<< ${DEFINITION})
+
+if [ ! -z "${PIPELINE_FILE}" ]
+then
+    DEFINITION=$(jq '.command += ["--pipeline_file", "'${PIPELINE_FILE}'"]' <<< ${DEFINITION})
+fi
+
+if [ ! -z "${DATA_CONFIG_FILE}" ]
+then
+    DEFINITION=$(jq '.command += ["--data_config_file", "'${DATA_CONFIG_FILE}'"]' <<< ${DEFINITION})
+fi
+
+DEFINITION=$(jq '.command += ["--skip_bids_validator", "--participant_label", ""]' <<< ${DEFINITION})
+
 
 for PARTICIPANT in ${PARTICIPANTS}
 do
+    PARTICIPANT_DEFINITION=$(jq '.command[-1] = "'${PARTICIPANT}'"' <<< ${DEFINITION})
     aws batch submit-job \
         --job-name ${PROJECT} \
         --job-queue ${PROJECT} \
         --job-definition ${PROJECT} \
-        --container-overrides "{
-            \"vcpus\": ${CONTAINER_CPU},
-            \"memory\": ${CONTAINER_MEMORY},
-            \"command\": [
-                \"--skip_bids_validator\",
-                \"--participant_label\", \"$PARTICIPANT\",
-                \"--pipeline_file\", \"${PIPELINE_FILE}\",
-                \"--data_config_file\", \"${DATA_CONFIG_FILE}\",
-                \"/\", \"${OUTPUT_DIR}\", \"participant\"
-            ]
-        }"
+        --container-overrides "${PARTICIPANT_DEFINITION}"
 done
 
 # Code to check for logs
@@ -148,15 +166,13 @@ exit 0
     cpac-batch \
     --n_cpus 4 \
     --mem_gb 8 \
-    --pipeline_file s3://cpac-batch/pipeline_config.yaml \
     --data_config_file s3://cpac-batch/data_config.yaml \
     --output_dir s3://cpac-batch/output -- 0050642 0050646 0050647 0050649 0050653 0050654 0050656 0050659 0050660
 
 
 ./process_subjects.sh \
-    cpac-batch \
+    my-project-cool-name \
+    s3://fcp-indi/data/Projects/ABIDE/RawDataBIDS/NYU/ \
     --n_cpus 4 \
     --mem_gb 8 \
-    --pipeline_file s3://cpac-batch/pipeline_config.yaml \
-    --data_config_file s3://cpac-batch/data_config.yaml \
-    --output_dir s3://cpac-batch/output -- 0050642
+    --output_dir s3://cpac-batch/output -- 0051159

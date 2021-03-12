@@ -11,7 +11,7 @@ variable "aws_region" {
 }
 
 variable "batch_container_image" {
-  default = "anibalsolon/cpac"
+  default = "anibalsolon/c-pac"
 }
 
 variable "batch_max_vcpus" {

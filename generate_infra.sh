@@ -45,9 +45,7 @@ if [[ ! -f $PUBLIC_KEY_FILE ]]; then
     exit 1
 fi
 
-echo "
-*** Warning: This is using a tweaked C-PAC to work with AWS. Run 'git pull' from time to time to check for official updates. ***
-"
+terraform init tf
 
 terraform apply \
     -var "project=${PROJECT}" \
@@ -58,4 +56,4 @@ terraform apply \
 
 exit 0
 
-./generate_infra.sh cpac-batch --max_cpu 16 --instance_type c4.4xlarge
+./generate_infra.sh cpac-batch --max_cpu 16
