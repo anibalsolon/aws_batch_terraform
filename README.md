@@ -4,7 +4,9 @@ This set of scripts and Terraform definitions will help you to seamlessly build 
 ## Pre-requisites
 
 First, you need to install and configurate the AWS CLI: https://docs.aws.amazon.com/cli/latest/userguide/installing.html
+
 And authenticate with your access and secret key: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
+
 Now, you need to install Terraform: https://www.terraform.io/intro/getting-started/install.html
 
 You are ready to start preprocessing!
