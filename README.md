@@ -15,20 +15,21 @@ You are ready to start preprocessing!
 
 In order to preprocess your neuroimages on AWS, the data must be on a S3 bucket, along with the data config and pipeline config YAML file.
 
-The AWS user that you use to configure AWS CLI should have access to the S3 bucket.
+The AWS user that you use to configure AWS CLI must have access to the S3 bucket.
 
 ## Building up the infrastructure
 
 Please check your current limits of running instances on AWS: https://console.aws.amazon.com/ec2/v2/home#Limits:
 You can open a support ticket on AWS to raise these limits.
 
-To build the infrastructure, you should run:
+To build the infrastructure, you must run:
 ```bash
 ./generate_infra.sh my-project-cool-name --max_cpu 16 
 ```
 
 `max_cpu` indicates the maximum of vCPUs will be available to execute the jobs.
-Having the limit of 20 cpus, and executing 14 jobs that use 4 cpus each, only 5 jobs are executed concurrently and the other 9 jobs get queued.
+Having the limit of 20 cpus, and executing 14 jobs that use 4 cpus each, only 5 jobs are executed concurrently and the
+other 9 jobs get queued.
 
 Other options are:
 `--aws_region`: to specity to which AWS region to create the resources.
