@@ -129,6 +129,17 @@ resource "aws_key_pair" "auth" {
   public_key = file(var.public_key_path)
 }
 
+resource "aws_launch_template" "default" {
+  name_prefix = var.project
+
+  block_device_mappings {
+    device_name = "/dev/xvdcz"
+    ebs {
+      volume_size = 200
+    }
+  }
+}
+
 resource "aws_batch_compute_environment" "default" {
   compute_environment_name = var.project
 
@@ -136,6 +147,10 @@ resource "aws_batch_compute_environment" "default" {
     instance_role = aws_iam_instance_profile.ecs_instance_role.arn
 
     instance_type = ["optimal"]
+
+    launch_template {
+      launch_template_id = aws_launch_template.default.id
+    }
 
     ec2_key_pair = aws_key_pair.auth.id
 
