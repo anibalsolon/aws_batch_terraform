@@ -1,5 +1,6 @@
 #!/bin/bash
 
+AWS_REGION="us-east-1"
 DEFAULT_CONTAINER_CPU=4
 DEFAULT_CONTAINER_MEMORY=8192
 
@@ -35,6 +36,11 @@ do
         ;;
         --mem_mb)
             CONTAINER_MEMORY_MB="$2"
+            shift
+        ;;
+        --aws_region)
+            AWS_REGION="$2"
+            shift
             shift
         ;;
         --)
@@ -143,6 +149,7 @@ for PARTICIPANT in ${PARTICIPANTS}
 do
     PARTICIPANT_DEFINITION=$(jq '.command[-1] = "'${PARTICIPANT}'"' <<< ${DEFINITION})
     aws batch submit-job \
+        --region ${AWS_REGION} \
         --job-name ${PROJECT} \
         --job-queue ${PROJECT} \
         --job-definition ${PROJECT} \
@@ -168,7 +175,6 @@ exit 0
     --mem_gb 8 \
     --data_config_file s3://cpac-batch/data_config.yaml \
     --output_dir s3://cpac-batch/output -- 0050642 0050646 0050647 0050649 0050653 0050654 0050656 0050659 0050660
-
 
 ./process_subjects.sh \
     my-project-cool-name \
