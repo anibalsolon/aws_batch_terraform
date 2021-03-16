@@ -5,7 +5,7 @@ In order to run this example, upload `data_config.yaml` and `pipeline_config.yam
 Generate the infrastructure to preprocess the ABIDE dataset.
 
 ```bash
-./generate_infra.sh cpac-abide --max_cpu 32 --instance_type c4.4xlarge
+./generate_infra.sh cpac-abide --max_cpu 32
 ```
 
 Schedule the preprocessing for some ABIDE subjects. You may change `my-bucket` to your actual bucket.
