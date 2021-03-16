@@ -4,7 +4,9 @@ This set of scripts and Terraform definitions will help you to seamlessly build 
 ## Pre-requisites
 
 First, you need to install and configurate the AWS CLI: https://docs.aws.amazon.com/cli/latest/userguide/installing.html
+
 And authenticate with your access and secret key: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
+
 Now, you need to install Terraform: https://www.terraform.io/intro/getting-started/install.html
 
 You are ready to start preprocessing!
@@ -13,24 +15,25 @@ You are ready to start preprocessing!
 
 In order to preprocess your neuroimages on AWS, the data must be on a S3 bucket, along with the data config and pipeline config YAML file.
 
-The AWS user that you use to configure AWS CLI should have access to the S3 bucket.
+The AWS user that you use to configure AWS CLI must have access to the S3 bucket.
 
 ## Building up the infrastructure
 
 Please check your current limits of running instances on AWS: https://console.aws.amazon.com/ec2/v2/home#Limits:
 You can open a support ticket on AWS to raise these limits.
 
-To build the infrastructure, you should run:
+To build the infrastructure, you must run:
 ```bash
 ./generate_infra.sh my-project-cool-name --max_cpu 16 
 ```
 
 `max_cpu` indicates the maximum of vCPUs will be available to execute the jobs.
-Having the limit of 20 cpus, and executing 14 jobs that use 4 cpus each, only 5 jobs are executed concurrently and the other 9 jobs get queued.
+Having the limit of 20 cpus, and executing 14 jobs that use 4 cpus each, only 5 jobs are executed concurrently and the
+other 9 jobs get queued.
 
 Other options are:
-`--aws_region`: to specity to which AWS region to create the resources.
-`--public_key_path`: to specify the public SSH key to use in the Batch instances. By default, it uses `~/.ssh/id_rsa.pub`.
+* `--aws_region`: to specity to which AWS region to create the resources.
+* `--public_key_path`: to specify the public SSH key to use in the Batch instances. By default, it uses `~/.ssh/id_rsa.pub`.
 
 The command will show which AWS resources are going to be created. You need to confirm it with an "yes".
 
@@ -63,8 +66,8 @@ The pipeline YAML file is optional, using the default pipeline when it is not pr
 After the double dashes, a list of subject IDs must be provided.
 
 Other options are:
-`--n_cpus`: to specity the number of CPUs to allocate for each job.
-`--mem_gb`: to specify the amount of memory used for each job.
+* `--n_cpus`: to specity the number of CPUs to allocate for each job.
+* `--mem_gb`: to specify the amount of memory used for each job.
 
 It will schedule a job for each subject, so AWS Batch manager will parallelise all subjects pipelines.
 
