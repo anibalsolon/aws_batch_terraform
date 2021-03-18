@@ -17,3 +17,7 @@ variable "batch_container_image" {
 variable "batch_max_vcpus" {
   default = 5
 }
+
+variable "batch_storage" {
+  default = 200
+}

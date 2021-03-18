@@ -2,6 +2,35 @@ provider "aws" {
   region = var.aws_region
 }
 
+data "template_file" "instance" {
+  template = "${file("${path.module}/instance.sh")}"
+  vars = {
+    storage = var.batch_storage
+  }
+}
+
+data "template_file" "batch_agent" {
+  template = "${file("${path.module}/batch_agent.sh")}"
+  vars = {
+    storage = var.batch_storage
+  }
+}
+
+data "template_cloudinit_config" "user_data" {
+  gzip          = false
+  base64_encode = true
+
+  part {
+    content_type = "text/cloud-boothook"
+    content      = "${data.template_file.instance.rendered}"
+  }
+
+  part {
+    content_type = "text/x-shellscript"
+    content      = "${data.template_file.batch_agent.rendered}"
+  }
+}
+
 # Networking
 
 resource "aws_vpc" "default" {
@@ -132,12 +161,12 @@ resource "aws_key_pair" "auth" {
 resource "aws_launch_template" "default" {
   name_prefix = var.project
 
-  user_data = filebase64("${path.module}/userdata.sh")
+  user_data = data.template_cloudinit_config.user_data.rendered
 
   block_device_mappings {
     device_name = "/dev/xvdcz"
     ebs {
-      volume_size = 200
+      volume_size = var.batch_storage
     }
   }
 }
