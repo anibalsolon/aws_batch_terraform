@@ -132,6 +132,8 @@ resource "aws_key_pair" "auth" {
 resource "aws_launch_template" "default" {
   name_prefix = var.project
 
+  user_data = filebase64("${path.module}/userdata.sh")
+
   block_device_mappings {
     device_name = "/dev/xvdcz"
     ebs {
