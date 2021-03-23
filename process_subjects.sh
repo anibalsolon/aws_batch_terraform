@@ -131,6 +131,8 @@ DEFINITION='{
 }'
 
 DEFINITION=$(jq '.command += ["'${BIDS_DIR}'", "'${OUTPUT_DIR}'", "participant"]' <<< ${DEFINITION})
+DEFINITION=$(jq '.command += ["--mem_gb", "'${CONTAINER_MEMORY}'"]' <<< ${DEFINITION})
+DEFINITION=$(jq '.command += ["--n_cpus", "'${CONTAINER_CPU}'"]' <<< ${DEFINITION})
 
 if [ ! -z "${PIPELINE_FILE}" ]
 then
