@@ -54,7 +54,7 @@ resource "aws_subnet" "default" {
 }
 
 resource "aws_security_group" "default" {
-  name   = "batch_security_group"
+  name   = "${var.project}-batch_security_group"
   vpc_id = aws_vpc.default.id
 
   ingress {
@@ -75,7 +75,7 @@ resource "aws_security_group" "default" {
 # IAM policies
 
 resource "aws_iam_role" "ecs_instance_role" {
-  name = "ecs_instance_role"
+  name = "${var.project}-ecs_instance_role"
 
   assume_role_policy = <<EOF
 {
@@ -99,7 +99,7 @@ resource "aws_iam_role_policy_attachment" "ecs_instance_role" {
 }
 
 resource "aws_iam_role_policy" "ecs_instance_role_policy" {
-  name = "ecs_instance_role_policy"
+  name = "${var.project}-ecs_instance_role_policy"
   role = aws_iam_role.ecs_instance_role.id
 
   policy = <<EOF
@@ -123,12 +123,12 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "ecs_instance_role" {
-  name = "ecs_instance_role"
+  name = "${var.project}-ecs_instance_role"
   role = aws_iam_role.ecs_instance_role.name
 }
 
 resource "aws_iam_role" "aws_batch_service_role" {
-  name = "aws_batch_service_role"
+  name = "${var.project}-aws_batch_service_role"
 
   assume_role_policy = <<EOF
 {
@@ -162,9 +162,10 @@ resource "aws_launch_template" "default" {
   name_prefix = var.project
 
   user_data = data.template_cloudinit_config.user_data.rendered
+  update_default_version = true
 
   block_device_mappings {
-    device_name = "/dev/xvdcz"
+    device_name = "/dev/xvda"
     ebs {
       volume_size = var.batch_storage
     }
